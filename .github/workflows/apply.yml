@@ -1,0 +1,30 @@
+name: TerraformApply
+
+on: 
+  workflow_dispatch:
+    inputs:
+      allowRun:
+        description: 'Deploy Plan?'
+
+jobs:
+  TerraformApply:
+    needs:
+    - "TerraformPlan"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+      - name: Init
+        run: |
+          terraform version
+          terraform init
+          terraform validate
+      - name: Download Plan File
+        uses: actions/download-artifact@v2
+        with:
+          name: planfile
+      - name: Apply
+        run: |
+          terraform apply plan.tfplan
