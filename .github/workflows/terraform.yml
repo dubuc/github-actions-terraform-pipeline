@@ -24,6 +24,8 @@ jobs:
       with:
         path: "plan.tfplan"
   TerraformApply:
+    needs:
+    - "TerraformPlan"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
