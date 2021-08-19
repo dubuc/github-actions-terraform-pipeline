@@ -22,6 +22,7 @@ jobs:
     - name: Upload TF Plan
       uses: actions/upload-artifact@v2
       with:
+        name: planfile
         path: "plan.tfplan"
   TerraformApply:
     needs:
@@ -40,7 +41,7 @@ jobs:
       - name: Download Plan File
         uses: actions/download-artifact@v2
         with:
-          path: "plan.tfplan"
+          name: planfile
       - name: Apply
         run: |
           terraform apply plan.tfplan
