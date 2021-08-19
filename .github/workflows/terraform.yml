@@ -43,4 +43,4 @@ jobs:
           path: "plan.tfplan"
       - name: Apply
         run: |
-          terraform apply tfplan
+          terraform apply plan.tfplan
