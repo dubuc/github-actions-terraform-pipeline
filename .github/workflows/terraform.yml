@@ -9,6 +9,20 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2.3.4
-    - name: Verify workspace
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1.2.1
+    - name: Init
       run: |
-        ls -la
+        terraform version
+        terraform init
+        terraform validate
+    - name: Plan
+      run: |
+        terraform plan -out plan.tfplan
+  Apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Apply
+        run: |
+          terraform apply plan.tfplan
+    
