@@ -19,14 +19,26 @@ jobs:
     - name: Plan
       run: |
         terraform plan -out plan.tfplan
+    - name: Upload TF Plan
+      uses: actions/upload-artifact@v2
+      with:
+        path: "plan.tfplan"
   TerraformApply:
     runs-on: ubuntu-latest
-    needs:
-    - "TerraformPlan"
     steps:
-      - name: Apply
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+      - name: Init
         run: |
           terraform version
-          ls -la
-          terraform apply --auto-approve plan.tfplan
-    
+          terraform init
+          terraform validate
+      - name: Download Plan File
+        uses: actions/download-artifact@v2
+        with:
+          path: "plan.tfplan"
+      - name: Apply
+        run: |
+          terraform apply tfplan
